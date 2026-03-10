@@ -31,13 +31,14 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  flutter_riverpod: ^3.2.1
+  flutter_riverpod: ^3.3.1
   state_notifier: ^1.0.0 # Hier hinzufügen!
   shared_preferences: ^2.5.4
   fl_chart: ^1.1.1
   flutter_local_notifications: ^20.1.0
   http: ^1.6.0
   logger: ^2.6.2
+  google_fonts: ^8.0.2
 
 dev_dependencies:
   flutter_test:
