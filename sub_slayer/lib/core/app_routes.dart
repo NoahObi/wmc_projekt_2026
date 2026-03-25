@@ -4,6 +4,7 @@ import '../screens/abo_list_screen.dart';
 import '../screens/add_edit_screen.dart';
 import '../screens/analytics_screen.dart';
 import '../screens/settings_screen.dart';
+import '../models/subscription.dart';
 
 class AppRoutes {
   static const String dashboard = '/';
@@ -16,9 +17,9 @@ class AppRoutes {
     return {
       dashboard: (context) => const DashboardScreen(),
       aboList: (context) => const AboListScreen(),
-      addEdit: (context) => const AddEditScreen(),
+      addEdit: (context) => AddEditScreen(subscription: ModalRoute.of(context)?.settings.arguments as Subscription?),
       analytics: (context) => const AnalyticsScreen(),
-      //settings: (context) => const SettingsScreen(),
+      settings: (context) => const SettingsScreen(),
     };
   }
 }

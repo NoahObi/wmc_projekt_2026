@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/app_routes.dart';
-import 'core/app_theme.dart';
+import 'providers/theme_provider.dart';
+import 'providers/localization_provider.dart';
+import 'services/notification_service.dart'; 
 
-void main() {
+void main() async { 
+  // 1. Stellt sicher, dass die Flutter-Engine läuft
+  WidgetsFlutterBinding.ensureInitialized(); 
+
+  // 2. Initialisiert das Benachrichtigungs-Plugin
+  await NotificationService().init();
+  
   runApp(const ProviderScope(child: SubSlayerApp()));
 }
 
-class SubSlayerApp extends StatelessWidget {
+class SubSlayerApp extends ConsumerWidget {
   const SubSlayerApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeProvider);
+    final locale = ref.watch(localizationProvider.notifier).getLocale();
+    final language = ref.watch(localizationProvider);
+
     return MaterialApp(
-      title: 'SubSeeker',
+      title: AppLocalizations.translate(language, 'app_title'),
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme, // Unser ausgelagertes Theme
-      initialRoute: AppRoutes.dashboard, // Startbildschirm
-      routes: AppRoutes.getRoutes(), // Die registrierten Routen
+      theme: theme,
+      locale: locale,
+      initialRoute: AppRoutes.dashboard,
+      routes: AppRoutes.getRoutes(),
     );
   }
 }

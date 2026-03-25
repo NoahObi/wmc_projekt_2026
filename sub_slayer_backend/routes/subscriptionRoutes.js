@@ -49,4 +49,20 @@ router.delete('/subscriptions/:id', async (req, res) => {
     }
 });
 
+// Abonnement aktualisieren
+router.put('/subscriptions/:id', async (req, res) => {
+    const dto = new CreateSubscriptionDto(req.body);
+
+    if (!dto.isValid()) {
+        return res.status(400).json({ error: 'Fehlerhafte oder unvollständige Daten' });
+    }
+
+    try {
+        const result = await subscriptionService.updateSubscription(req.params.id, dto);
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;
