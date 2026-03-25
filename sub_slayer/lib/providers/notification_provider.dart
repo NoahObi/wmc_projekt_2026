@@ -57,10 +57,10 @@ class NotificationNotifier extends Notifier<NotificationState> {
     state = NotificationState(enabled: enabled, reminderTime: state.reminderTime);
     
     if (enabled) {
-      await NotificationService().showTestNotification();
-      await _rescheduleAll();
+      await _rescheduleAll(); 
+      await NotificationService().showTestNotification(); 
     } else {
-      await NotificationService().cancelAllNotifications();
+      await NotificationService().cancelAllNotifications(); 
     }
   }
 
@@ -71,7 +71,7 @@ class NotificationNotifier extends Notifier<NotificationState> {
     state = NotificationState(enabled: state.enabled, reminderTime: time);
     
     if (state.enabled) {
-      await _rescheduleAll(); // Bei neuer Zeit sofort alle Wecker umstellen
+      await _rescheduleAll();
     }
   }
 
@@ -95,12 +95,12 @@ class NotificationNotifier extends Notifier<NotificationState> {
     else if (state.reminderTime == 'reminder_7') {daysToSubtract = 7;}
 
     final now = DateTime.now();
-    int notificationId = 100; //  damit 0 (der Test) nicht versehentlich gelöscht wird
+    int notificationId = 100; //  damit der Test nicht versehentlich gelöscht wird
 
     for (var sub in subscriptions) {
       DateTime nextPayment = sub.startDate;
       
-      // Berechne das NÄCHSTE Zahlungsdatum in der Zukunft (genau wie im Dashboard)
+      // Berechne das NÄCHSTE Zahlungsdatum 
       while (nextPayment.isBefore(now)) {
         if (sub.billingInterval.toLowerCase() == 'yearly') {
           nextPayment = DateTime(nextPayment.year + 1, nextPayment.month, nextPayment.day);
@@ -113,18 +113,6 @@ class NotificationNotifier extends Notifier<NotificationState> {
       DateTime reminderDate = nextPayment.subtract(Duration(days: daysToSubtract));
       reminderDate = DateTime(reminderDate.year, reminderDate.month, reminderDate.day, 10, 0);
 
-      // Falls dieser Erinnerungszeitpunkt (z.B. gestern um 10) schon vorbei ist, berechne den für den nächsten Zyklus
-      if (reminderDate.isBefore(now)) {
-        if (sub.billingInterval.toLowerCase() == 'yearly') {
-          nextPayment = DateTime(nextPayment.year + 1, nextPayment.month, nextPayment.day);
-        } else {
-          nextPayment = DateTime(nextPayment.year, nextPayment.month + 1, nextPayment.day);
-        }
-        reminderDate = nextPayment.subtract(Duration(days: daysToSubtract));
-        reminderDate = DateTime(reminderDate.year, reminderDate.month, reminderDate.day, 10, 0);
-      }
-
-      // 2. Benachrichtigung fest beim Handy-System einspeichern
       if (reminderDate.isAfter(now)) {
         await NotificationService().scheduleNotification(
           id: notificationId++,

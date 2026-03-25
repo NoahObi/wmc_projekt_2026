@@ -17,7 +17,7 @@ db.serialize(() => {
         name TEXT NOT NULL
     )`);
 
-    // 2. Tabelle: Abonnements (inklusive interval)
+    // 2. Tabelle: Abonnements 
     db.run(`CREATE TABLE IF NOT EXISTS subscriptions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -29,7 +29,7 @@ db.serialize(() => {
         FOREIGN KEY (category_id) REFERENCES categories (id)
     )`);
 
-    // 3. Tabelle: Zahlungsverlauf (Für die Statistiken & Charts)
+    // 3. Tabelle: Zahlungsverlauf 
     db.run(`CREATE TABLE IF NOT EXISTS payments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         subscription_id INTEGER NOT NULL,
@@ -38,7 +38,7 @@ db.serialize(() => {
         FOREIGN KEY (subscription_id) REFERENCES subscriptions (id) ON DELETE CASCADE
     )`);
 
-    // Standard-Kategorien einfügen (basierend auf Mockup "Kategorie")
+    // Standard-Kategorien
     db.get("SELECT COUNT(*) AS count FROM categories", (err, row) => {
         if (row.count === 0) {
             const stmt = db.prepare("INSERT INTO categories (name) VALUES (?)");

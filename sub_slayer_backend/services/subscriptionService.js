@@ -12,7 +12,6 @@ class SubscriptionService {
 
     getAllSubscriptions() {
         return new Promise((resolve, reject) => {
-            // color_hex entfernt, billing_interval hinzugefügt
             const query = `
                 SELECT s.id, s.name, s.price, s.description, s.start_date, s.billing_interval, c.name as category_name 
                 FROM subscriptions s
@@ -43,7 +42,6 @@ class SubscriptionService {
     addSubscription(dto) {
         const self = this;
         return new Promise((resolve, reject) => {
-            // billing_interval zur Datenbank-Abfrage hinzugefügt
             const query = `INSERT INTO subscriptions (name, price, description, start_date, billing_interval, category_id) VALUES (?, ?, ?, ?, ?, ?)`;
             db.run(query, [dto.name, dto.price, dto.description, dto.start_date, dto.billing_interval, dto.category_id], function(err) {
                 if (err) return reject(err);
